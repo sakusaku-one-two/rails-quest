@@ -1,0 +1,2 @@
+module ArtivlesHelper
+end
