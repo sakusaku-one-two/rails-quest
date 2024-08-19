@@ -23,6 +23,7 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
+RUN gem install bundler:2.3.5 # Bundlerのバージョンを更新
 RUN gem install pg -- --with-pg-config=/usr/bin/pg_config
 RUN bundle install --jobs=4 --retry=3 && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
