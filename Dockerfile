@@ -7,6 +7,7 @@ FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 # Rails app lives here
 WORKDIR /rails
 
+
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
@@ -19,13 +20,18 @@ FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev curl
+
+# RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+#     apt-get install -y nodejs && \
+#     npm install -g yarn
+
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler:2.3.5 # Bundlerのバージョンを更新
 RUN gem install pg -- --with-pg-config=/usr/bin/pg_config
-RUN bundle install --jobs=4 --retry=3 && \
+RUN bundle install --jobs=4 --retry=3 --no-deployment && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 RUN gem install rails
@@ -36,8 +42,14 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
+# Webpackerの設定ファイルを生成
+# RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails webpacker:install
+
+# # Webpackの設定ファイルを生成
+# RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails webpacker:compile || true
+
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
 # Final stage for app image

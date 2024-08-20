@@ -36,9 +36,9 @@
         <% @articles.each do |article| %>
           <div class="article-preview">
             <div class="article-meta">
-              <a href="/profile/<%= @user.username %>"><img src="<%= @user.image %>" /></a>
+              <a href="/user/<%= @user.username %>"><img src="<%= @user.image %>" /></a>
               <div class="info">
-                <a href="/profile/<%= @user.username %>" class="author"><%= @user.username %></a>
+                <a href="/user/<%= @user.username %>" class="author"><%= @user.username %></a>
                 <span class="date"><%= article.created_at.strftime("%B %d, %Y") %></span>
               </div>
               <button class="btn btn-outline-primary btn-sm pull-xs-right">

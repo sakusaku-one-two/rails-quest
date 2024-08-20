@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get '/article/:slug',to: 'articles#show'
   get 'user/:id', to: 'users#show'
   get 'login',to: 'users#login', as: 'login'
-  
+  post 'login',to: 'users#login'
 
   root "home#index"
 
