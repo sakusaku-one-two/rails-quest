@@ -4,9 +4,9 @@
       <h1><%= @article.title %></h1>
 
       <div class="article-meta">
-        <a href="/profile/<%= @article.user.username %>"><img src="<%= @article.user.image %>" /></a>
+        <a href="/user/<%= @article.user.username %>"><img src="<%= @article.user.image %>" /></a>
         <div class="info">
-          <a href="/profile/<%= @article.user.username %>" class="author"><%= @article.user.username %></a>
+          <a href="/user/<%= @article.user.username %>" class="author"><%= @article.user.username %></a>
           <span class="date"><%= @article.created_at.strftime("%B %d, %Y") %></span>
         </div>
         <button class="btn btn-sm btn-outline-secondary">
@@ -15,7 +15,7 @@
         </button>
         <button class="btn btn-sm btn-outline-primary">
           <i class="ion-heart"></i>
-          &nbsp; Favorite Article <span class="counter">(<%= @article.favorites_count %>)</span>
+          &nbsp; Favorite Article <span class="counter">(<%= @article.favoritesCount %>)</span>
         </button>
       </div>
     </div>
@@ -34,7 +34,7 @@
       <div class="article-meta">
         <a href="/profile/<%= @article.user.username %>"><img src="<%= @article.user.image %>" /></a>
         <div class="info">
-          <a href="/profile/<%= @article.author.username %>" class="author"><%= @article.author.username %></a>
+          <a href="/profile/<%= @article.user.username %>" class="author"><%= @article.user.username %></a>
           <span class="date"><%= @article.created_at.strftime("%B %d, %Y") %></span>
         </div>
       </div>

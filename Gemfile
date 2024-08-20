@@ -20,7 +20,7 @@ gem "importmap-rails"
 
 gem 'bcrypt'  # パスワード専用のハッシュ値を作成してくれる
 gem 'jwt' #jsonトークンをエンコードしたりデコードしてくれる
-
+gem 'webpacker'
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"

@@ -9,7 +9,7 @@ class CreateArticles < ActiveRecord::Migration[7.1]
       t.datetime :updatedAt
       t.boolean :favorited
       t.integer :favoritesCount
-      t.references :author, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

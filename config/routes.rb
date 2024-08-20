@@ -14,8 +14,10 @@ Rails.application.routes.draw do
 
   get "/home",to: "home#index"
 
-  resources :articles,only:[:index,:show,:update,:create]
-  resources :users
+  get '/article/:slug',to: 'articles#show'
+  get 'user/:id', to: 'users#show'
+  get 'login',to: 'users#login', as: 'login'
+  
 
   root "home#index"
 
