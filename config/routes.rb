@@ -12,13 +12,19 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  get "/home",to: "home#index"
+  get "/home", to: "home#index"
 
-  get '/article/:slug',to: 'articles#show'
+  get '/article/:slug', to: 'articles#show'
+  get 'edit/:slug', to: 'articles#edit', as: 'article'
   get 'user/:id', to: 'users#show'
-  get 'login',to: 'users#login', as: 'login'
-  post 'login',to: 'users#login'
+  get 'login', to: 'users#login', as: 'login'
+  post 'login', to: 'users#login'
+
+  resources :articles do
+    member do
+      delete 'remove_tag/:tag_id', to: 'articles#remove_tag', as: :remove_tag
+    end
+  end
 
   root "home#index"
-
 end
