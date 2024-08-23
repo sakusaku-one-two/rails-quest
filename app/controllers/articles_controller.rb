@@ -25,10 +25,9 @@ class ArticlesController < ApplicationController
 
   #記事を更新するメソッド
   def update
-    article = Article.find_by_slug(paramas [:slug])
+    article = Article.find(params[:id])
     return redirect_to :index if article.nil?
-    return redirect_to :login_path if @current_user.id != article.user.id
-
+    return redirect_to :login if @current_user.id != article.user.id
     return render :update,locals: {article:article} if request.get?
 
     if article.update(article_params)

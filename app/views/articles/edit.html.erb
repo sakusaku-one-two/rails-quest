@@ -7,19 +7,14 @@
         </ul>
 
 
-        <%= form_with( model: @article,local: true,url: article_path(@article)) do |f| %>
-            <fieldset>
-                <fieldset class="form-group">
-                    <%= f.text_field :title %>
-            </fieldset>
-            </fieldset>
-        
-        
+        <%= form_with( model: @article,local: true,url: article_path(@article),method: :patch) do |f| %>
+            
+
           <fieldset>
             <fieldset class="form-group">
-
               <%= f.text_field :title, class:'form-control form-control-lg',placeholder: "Article Title" %>
             </fieldset>
+
             <fieldset class="form-group"
               <%= f.text_field :description ,class:"form-control", placeholder:"What's this article about?" %>
             </fieldset>
@@ -36,16 +31,15 @@
               </span>
             <% end %>
             <%= f.text_field :new_tag, class: "form-control", placeholder: "Enter new tag" %>
-          </fieldset>
-            <%= f.text_field :new_tag, class: "form-control", placeholder: "Enter new tag" %>
-              <input type="text" class="form-control" placeholder="Enter tags" />
+          
+            </fieldset>
               <div class="tag-list">
-                <span class="tag-default tag-pill"> <i class="ion-close-round"></i> tag </span>
+              <span class="tag-default tag-pill"> <i class="ion-close-round"></i> tag </span>
               </div>
             </fieldset>
-            <button class="btn btn-lg pull-xs-right btn-primary" type="button">
-              Publish Article
-            </button>
+            <%= button_to 'Update Article',@article,method: :update,class: "btn btn-lg pull-xs-right btn-primary" %>
+           
+            <%= button_to 'Delete Article',@article,method: :delete,data: {confirm: 'Are you sure?'},class: 'btn btn-lg btn-danger' %>
           </fieldset>
         </form>
 
