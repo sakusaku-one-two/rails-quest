@@ -9,7 +9,7 @@
 
         <%= form_with( model: @article,local: true,url: article_path(@article),method: :patch) do |f| %>
             
-
+          
           <fieldset>
             <fieldset class="form-group">
               <%= f.text_field :title, class:'form-control form-control-lg',placeholder: "Article Title" %>
@@ -30,7 +30,7 @@
                 <%= tag.name %>
               </span>
             <% end %>
-            <%= f.text_field :new_tag, class: "form-control", placeholder: "Enter new tag" %>
+            <%= f.text_field :tags, class: "form-control", placeholder: "Enter new tag" %>
           
             </fieldset>
               <div class="tag-list">

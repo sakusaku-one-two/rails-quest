@@ -12,11 +12,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  get "/home", to: "home#index"
+  get "/home", to: "home#index", as: 'index'
 
-  get '/article/:slug', to: 'articles#show'
-  get 'edit/:slug', to: 'articles#edit', as: 'article'
-  patch 'edit/:id', to: 'articles#update', as: 'article_edit'
+  resources :articles 
+  # get '/article/:slug', to: 'articles#show'
+  # get 'edit/:slug', to: 'articles#edit', as: 'article'
+  # patch 'edit/:id', to: 'articles#update', as: 'article_edit'
   get 'user/:id', to: 'users#show'
   get 'login', to: 'users#login', as: 'login'
   post 'login', to: 'users#login'
