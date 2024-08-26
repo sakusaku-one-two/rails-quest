@@ -18,7 +18,7 @@
           <i class="ion-heart"></i>
           &nbsp; Favorite Article <span class="counter">(<%= @article.favoritesCount %>)</span>
         </button>
-        <%= link_to 'Edit Article', edit_article_path(@article), class: 'btn btn-sm btn-outline-warning' %>
+        <%= link_to 'Edit Article', edit_article_path(@article.id), class: 'btn btn-sm btn-outline-warning' %>
       </div>
     </div>
   </div>

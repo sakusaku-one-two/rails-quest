@@ -10,4 +10,11 @@ class Article < ApplicationRecord
     has_many :tags, through: :article_tags
     #Articleは多くのTagを持っています。
     #これは、article_tagsテーブルを通じて多対多の関係を実現します。
+    before_create :set_slug
+    
+   
+    private
+    def set_slug
+        self.slug = title.parameterize
+    end
 end

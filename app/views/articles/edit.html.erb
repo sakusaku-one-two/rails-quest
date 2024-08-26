@@ -6,44 +6,39 @@
           <li>That title is required</li>
         </ul>
 
-
-        <%= form_with( model: @article,local: true,url: article_path(@article),method: :patch) do |f| %>
-            
-          
+        <%= form_with(model: @article, local: true, url: article_path(@article.id), method: :patch) do |f| %>
           <fieldset>
             <fieldset class="form-group">
-              <%= f.text_field :title, class:'form-control form-control-lg',placeholder: "Article Title" %>
+              <%= f.text_field :title, class: 'form-control form-control-lg', placeholder: "Article Title" %>
             </fieldset>
 
-            <fieldset class="form-group"
-              <%= f.text_field :description ,class:"form-control", placeholder:"What's this article about?" %>
-            </fieldset>
             <fieldset class="form-group">
-              <%= f.text_area :body,class:"form-control",rows:8,placeholder:"Write your article (in markdown)" %>
+              <%= f.text_field :description, class: "form-control", placeholder: "What's this article about?" %>
             </fieldset>
-            <fieldset class="form-group">
 
             <fieldset class="form-group">
-            <% @article.tags.each do |tag| %>
-              <span class="tag-default tag-pill">
-                <i class="ion-close-round" data-method="delete" href="<%= remove_tag_article_path(@article, tag_id: tag.id) %>"></i>
-                <%= tag.name %>
-              </span>
-            <% end %>
-            <%= f.text_field :tags, class: "form-control", placeholder: "Enter new tag" %>
-          
+              <%= f.text_area :body, class: "form-control", rows: 8, placeholder: "Write your article (in markdown)" %>
             </fieldset>
-              <div class="tag-list">
-              <span class="tag-default tag-pill"> <i class="ion-close-round"></i> tag </span>
-              </div>
+
+            <fieldset class="form-group">
+              <% @article.tags.each do |tag| %>
+                <span class="tag-default tag-pill">
+                  <i class="ion-close-round" data-method="delete" href="<%= remove_tag_article_path(@article, tag_id: tag.id) %>"></i>
+                  <%= tag.name %>
+                </span>
+              <% end %>
+              <%= f.text_field :tags, class: "form-control", placeholder: "Enter new tag" %>
             </fieldset>
-            <%= button_to 'Update Article',@article,method: :update,class: "btn btn-lg pull-xs-right btn-primary" %>
-           
-            <%= button_to 'Delete Article',@article,method: :delete,data: {confirm: 'Are you sure?'},class: 'btn btn-lg btn-danger' %>
+
+            <div class="tag-list">
+              <span class="tag-default tag-pill"><i class="ion-close-round"></i> tag</span>
+            </div>
+
+            <%= f.submit 'Update Article', class: "btn btn-lg pull-xs-right btn-primary" %>
           </fieldset>
-        </form>
-
         <% end %>
+
+        <%= button_to 'Delete Article', article_path(@article.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-lg btn-danger' %>
       </div>
     </div>
   </div>
