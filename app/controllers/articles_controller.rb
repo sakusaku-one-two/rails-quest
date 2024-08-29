@@ -1,7 +1,7 @@
 class ArticlesController < ApplicationController
   protect_from_forgery with: :null_session, if: -> { request.format.json? }
-  before_action :authenticate_user, only: [:create, :update,:edit]
-  before_action :set_article, only: [:show, :edit, :update, :update_tags, :remove_tag]
+  before_action :authenticate_user, only: [:create, :update,:edit,:destroy]
+  before_action :set_article, only: [:show, :edit, :update, :update_tags, :remove_tag,:destroy]
 
   #記事の一覧を表示するメソッド
   def index
@@ -17,6 +17,10 @@ class ArticlesController < ApplicationController
     @article = Article.new
   end
   
+  def destroy
+    @article.destroy
+    redirect_to :index
+  end
 
   def edit
 
