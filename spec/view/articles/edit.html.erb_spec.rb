@@ -26,15 +26,15 @@ RSpec.describe "articles/edit", type: :view do #articles/editビューのテス�
 
 
     it "displays the existing tags" do#既存のタグが表示されるかをテスト
-        render
-        expect(rendered).to match /SampleTag/
+        render#ビューをレンダリング
+        expect(rendered).to match /SampleTag/#レンダリングされたビューに”SampleTag”が含まれているか確認
     end
 
-    it "has a delete button for the article" do
-        render
-        assert_select "form[action=?][method=?]", article_path(@article.id), "post" do
-            assert_select "input[type=?][value=?]", "submit", "Update Article"
+    it "has a delete button for the article" do#記事の削除ボタンが存在するかをテスト
+        render#ビューをレンダリング
+        assert_select "form[action=?][method=?]", article_path(@article.id), "post" do#フォームのアクションとメソッドを確認
+            assert_select "input[type=?][value=?]", "submit", "Update Article"#更新ボタンが存在するかの確認
         end
-        assert_select "button[type=?]", "submit", text: "Delete Article"
+        assert_select "button[type=?]", "submit", text: "Delete Article"#削除ボタンが存在するか確認
     end
 end
