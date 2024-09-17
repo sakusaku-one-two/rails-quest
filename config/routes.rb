@@ -4,8 +4,8 @@ Rails.application.routes.draw do
     #ユーザー関連
     post "user/registration", to: "users#registration" #ユーザー登録
     post "user/login", to: "users#login"
-    delete "user/logout/:id", to: "users#logout"
-    get "user/:id/articles", to: "users#articles"
+    delete "user/logout", to: "users#logout"
+    get "user/articles", to: "users#articles"
 
     #記事関連
     get "articles/all", to: "articles#all" #全記事を取得

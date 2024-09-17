@@ -1,11 +1,12 @@
     class ApplicationController < ActionController::API
+        include ActionController::Cookies
         before_action :authenticate_request, except: [:login]  # exceptを使用してloginアクションを除外
-        
+         
 
 
         def encode_jwt(user_id)
             secret_key = Rails.application.credentials.jwt_secret_key || ENV['SECRET_KEY_BASE']
-            encoded_jwt_token  = JWT.encode({id: user_id},secret_key)
+            encoded_jwt_token  = JWT.encode({"id": user_id},secret_key)
             return encoded_jwt_token
         end
 
@@ -17,9 +18,17 @@
 
         def authenticate_request
             raw_token = cookies.signed[:jwt]
+            if raw_token.nil?
+                Rails.logger.debug "トークンはありません"
+                return render json: {error:"nothing tokne"},status: :nothing
+            end
             decoded_token = decode_jwt(raw_token)
-            @current_user = User.find(decoded_token[:id])
-        rescue ActiveRecord::RecordNotFound,JWT::DecodeError 
-            render json: {error: "ユーザーが認証されてません"},status: :unauthorized
+            @current_user = User.find(decoded_token['id'])
+        rescue ActiveRecord::RecordNotFound,JWT::DecodeError => e
+            render json: {error: "ユーザーが認証されてません#{e.message}"},status: :unauthorized
         end
+
+
+      
+
     end 

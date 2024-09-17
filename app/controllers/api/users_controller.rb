@@ -1,7 +1,7 @@
 module Api
 
     class UsersController < ApplicationController
-        before_action authenticate_request, except [:login,:registration]
+        before_action :authenticate_request, except: [:login,:registration]
         
         # t.string "username"
         # t.string "email"
@@ -24,37 +24,47 @@ module Api
         end
 
         def login
-            user = @current_user || User.find_by(email:params[:email])
-            if user && user.authenticate(params[:password])
+            login_params = params[:user]
+            user = @current_user || User.find_by(email: login_params[:email])
+            if user && user.authenticate(login_params[:password])
+                @current_user = user
                 return setup_jwt_into_cookie(user.id)
             else
-                render json: {error: "ログインに失敗しました。"},status: :unauthorized
-            end 
+                render json: {error: "ログインに敗しました。",email:params[:user][:email],password:login_params[:password]},status: :unauthorized
+            end     
             
         end
 
         def logout
-
+            cookies.delete(:jwt,path:'/')
+            render json: {message: "ログアウトしました。"},status: :ok
         end
 
         def articles
-
+            my_articles = @current_user.articles.includes(:tags) # 'artcles'を'articles'に修正
+            render json: my_articles.to_json(include: :tags), status: :ok #記事とタグをJSON形式で返す
         end
-
+        
         private
-
         def setup_jwt_into_cookie(user_id)
-            token = encode_jwt({id: user.id})
-            cookies.signed[:jwt] = {value: token, httponly:true}#本番では追加でsecure: trueにする必要がある　これを行うとHTTPSでのみ送信される
-            return render json: {username: user.name},status: :ok
+            token = encode_jwt(user_id) # 'user.id'を'user_id'に修正
+            cookies.signed[:jwt] = {value: token,
+                                    httponly:true,#javascriptからアクセスできないようにする。
+                                    secure: false,#本番環境ではHTTPSのみ送信
+                                    expires: 1.hour.from_now,#１時間でJWTが消える
+                                    path: '/', #クッキーが有効なパスをルートに設定
+                                    same_site: :lax # SameSite属性を:laxに変更
+                                    }
+            # cookies.signed[:jwt] = token
+            render json: {username: @current_user.username,token:token}, status: :ok # 'user.name'を'@current_user.username'に修正
         end
 
         def require_user_params  
-            return params.require(:user).permit(:email,passowrd: password_confirmation)    
+            params.require(:user).permit(:email, :password, :password_confirmation) # 'passowrd'を'password'に修正
         end
 
         def create_user_params
-            params.require(:user).permit(:username, :emial, :password, :password_confirmation, :bio, :image)
+            params.require(:user).permit(:username, :email, :password, :password_confirmation, :bio, :image) # 'emial'を'email'に修正
         end
 
         

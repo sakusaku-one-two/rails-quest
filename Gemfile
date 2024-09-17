@@ -17,7 +17,8 @@ gem "puma", ">= 5.0"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
-
+gem 'rack-cors'
+# rack-cors gemを追加します。CORSを管理するためのミドルウェアです。
 gem 'bcrypt'  # パスワード専用のハッシュ値を作成してくれる
 gem 'jwt' #jsonトークンをエンコードしたりデコードしてくれる
 gem 'webpacker'
