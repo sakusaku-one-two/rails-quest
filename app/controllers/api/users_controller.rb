@@ -14,6 +14,7 @@ module Api
         # t.index ["email"], name: "index_users_on_email", unique: true
       
 
+        
         def registration
             @current_user = User.new(create_user_params)
             if @current_user.save
@@ -44,7 +45,29 @@ module Api
             my_articles = @current_user.articles.includes(:tags) # 'artcles'を'articles'に修正
             render json: my_articles.to_json(include: :tags), status: :ok #記事とタグをJSON形式で返す
         end
-        
+
+        def article_create
+            params_data = article_params
+            params_data[:user_id] = @current_user.id
+            article = Article.create!(params_data)
+            return render json: {article: article.to_json},status: :ok
+            rescue ActiveRecord::RecordInvalid => e 
+                return render json: {message: e.message},status: :bad_request
+            end
+        end
+
+
+        #delete "user/article/delete",to: "users#article_delete"#headerにarticle-idを格納
+        def article_delete
+            article_id = request.headers['Article-ID']#headerから取得
+            return render json:{message: "ヘッダーにIDがありません。"},status: :bad_request if article_id.nil?
+
+            article = @current_user.articles.find(article_id)
+            return render json: {message: '記事が削除されました。'},status: :ok if article.destroy
+            
+            return render json: {message: "削除が失敗しました。"},status: :bad_request
+        end
+
         private
         def setup_jwt_into_cookie(user_id)
             token = encode_jwt(user_id) # 'user.id'を'user_id'に修正
@@ -67,6 +90,9 @@ module Api
             params.require(:user).permit(:username, :email, :password, :password_confirmation, :bio, :image) # 'emial'を'email'に修正
         end
 
+        def article_params
+            params.require(:article).permit(:slug, :title, :description, :body, :favorited, :favoritesCount)  # 許可されたパラメータを設定
+        end
         
     end
 
