@@ -53,7 +53,7 @@ module Api
             return render json: {article: article.to_json},status: :ok
             rescue ActiveRecord::RecordInvalid => e 
                 return render json: {message: e.message},status: :bad_request
-            end
+            
         end
 
 
