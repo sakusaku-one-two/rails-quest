@@ -3,8 +3,8 @@ Rails.application.routes.draw do
 
     #ユーザー関連
     post "user/registration", to: "users#registration" #ユーザー登録
-    post "user/login", to: "users#login"
-    post "user/logout", to: "users#logout"
+    post "user/login", to: "users#login"#ユーザーのログイン（emial,password)
+    post "user/logout", to: "users#logout"#ログアウト
     delete "user/article/delete",to: "users#article_delete"#headerにarticle-idを格納
     post "user/article/create",to: "users#article_create"
     get "user/articles", to: "users#articles"
@@ -17,9 +17,10 @@ Rails.application.routes.draw do
     put "articles/update", to: "articles#update" #記事の更新 json bodyにidを格納している
 
     #タグ関連
-    delete "tags/delete",to: "tags#delete"
-    post "tags/insert",to: "tags#insert_article_tag"
-    post "tags/create",to: "tags#create_tag"
+    get "tags/all",to: "tags#get_all" #すべてのtagを取得
+    delete "tags/delete",to: "tags#delete" #tagの削除
+    post "tags/insert",to: "tags#insert_article_tag" #記事とタグを結びつける
+    post "tags/create",to: "tags#create_tag" #タグの削除
     
   end
 end

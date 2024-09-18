@@ -24,7 +24,7 @@
             end
             decoded_token = decode_jwt(raw_token)
             @current_user = User.find(decoded_token['id'])
-        rescue ActiveRecord::RecordNotFound,JWT::DecodeError => e
+        rescue ActiveRecord::RecordNotFound,JWT::DecodeError,ArgumentError => e
             render json: {error: "ユーザーが認証されてません#{e.message}"},status: :unauthorized
         end
 
