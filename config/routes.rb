@@ -16,5 +16,10 @@ Rails.application.routes.draw do
     post "articles/create", to: "articles#create" #新規作成
     put "articles/update", to: "articles#update" #記事の更新 json bodyにidを格納している
 
+    #タグ関連
+    delete "tags/delete",to: "tags#delete"
+    post "tags/insert",to: "tags#insert_article_tag"
+    post "tags/create",to: "tags#create_tag"
+    
   end
 end
