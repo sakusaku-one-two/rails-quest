@@ -1,12 +1,12 @@
 module Api
 
     class ArticlesController < ApplicationController
-        before_action :authenticate_request, except: [:all]
+        before_action :authenticate_request, except: [:all]#　すべての取得以外は必ず認証後のユーザーのみしかたたけない
         before_action :prev_get_article, except: [:all, :create]
 
         def all
-            articles = Article.includes(:tags).all  # タグを含むすべての記事を取得
-            render json: articles.to_json(include: :tags), status: :ok  # 記事とタグをJSON形式で返す
+            articles = Article.includes(:tags,:user).all  # タグを含むすべての記事を取得
+            render json: articles.to_json(include: {tags:{},user:{only:[:id,:username]}}), status: :ok  # 記事とタグをJSON形式で返す
         end
 
         def get

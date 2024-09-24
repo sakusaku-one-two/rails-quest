@@ -77,6 +77,7 @@ module Api
                                     expires: 1.hour.from_now,#１時間でJWTが消える
                                     path: '/', #クッキーが有効なパスをルートに設定
                                     same_site: :lax # SameSite属性を:laxに変更
+                                    # same_site: 'None',   
                                     }
             # cookies.signed[:jwt] = token
             render json: {username: @current_user.username,token:token}, status: :ok # 'user.name'を'@current_user.username'に修正
