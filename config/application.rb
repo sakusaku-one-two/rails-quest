@@ -34,10 +34,11 @@ module ConduitClone
     config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use Rack::Cors do
       allow do #許可する設定を開始
-        origins '*'#全てのオリジンからのリクエストを許可
+        origins 'http://localhost:3001' #全てのオリジンからのリクエストを許可
         resource '*',#すべてのリソースに対して
           headers: :any,#任意のヘッダを許可
-          methods: [:get,:post, :put, :patch,:delete,:options,:head] #許可するHTTPメソッドをしてい
+          methods: [:get,:post, :put, :patch,:delete,:options,:head], #許可するHTTPメソッドをしていc
+          credentials: true
       end 
     end
 

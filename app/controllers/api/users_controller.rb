@@ -24,6 +24,8 @@ module Api
             end
         end
 
+
+
         def login
             login_params = params[:user]
             user = @current_user || User.find_by(email: login_params[:email])
@@ -36,14 +38,19 @@ module Api
             
         end
 
+
         def logout
             cookies.delete(:jwt,path:'/')
             render json: {message: "ログアウトしました。"},status: :ok
         end
 
+
         def articles
-            my_articles = @current_user.articles.includes(:tags) # 'artcles'を'articles'に修正
-            render json: my_articles.to_json(include: :tags), status: :ok #記事とタグをJSON形式で返す
+            my_articles = @current_user.articles.includes(:tags,:user) # 'artcles'を'articles'に修正
+            render json: my_articles.to_json(include: {
+                tags:{},
+                user: {only:[:username,:id]}
+            }), status: :ok #記事とタグをJSON形式で返す
         end
 
         def article_create
@@ -63,7 +70,7 @@ module Api
             return render json:{message: "ヘッダーにIDがありません。"},status: :bad_request if article_id.nil?
 
             article = @current_user.articles.find(article_id)
-            return render json: {message: '記事が削除されました。'},status: :ok if article.destroy
+            return render json: {message: '記事が削除されました。',delete_id:article_id},status: :ok if article.destroy
             
             return render json: {message: "削除が失敗しました。"},status: :bad_request
         end
@@ -79,7 +86,7 @@ module Api
                                     same_site: :lax # SameSite属性を:laxに変更
                                     }
             # cookies.signed[:jwt] = token
-            render json: {username: @current_user.username,token:token}, status: :ok # 'user.name'を'@current_user.username'に修正
+            render json: {user: @current_user.as_json(except:[:password_digest,:email]), articles:@current_user.articles.includes(:tags) ,token:token}, status: :ok # 'user.name'を'@current_user.username'に修正
         end
 
         def require_user_params  

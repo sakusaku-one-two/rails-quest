@@ -5,8 +5,11 @@ module Api
         before_action :prev_get_article, except: [:all, :create]
 
         def all
-            articles = Article.includes(:tags).all  # タグを含むすべての記事を取得
-            render json: articles.to_json(include: :tags), status: :ok  # 記事とタグをJSON形式で返す
+            articles = Article.includes(:tags, :user).all  # タグとユーザーを含むすべての記事を取得
+            render json: articles.as_json(include: {
+                tags: {},  # タグ情報を含める
+                user: { only: [:username, :id] }  # ユーザー情報からusernameとidのみを含sめる
+            }), status: :ok  # 記事、タグ、ユーザー情報をJSON形式で返す
         end
 
         def get
