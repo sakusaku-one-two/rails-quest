@@ -30,7 +30,7 @@ module Api
 
         def update
             if @article.update(article_params)  # 記事を更新
-                render json: @article.to_json, status: :ok  # 更新された記事をJSON形式で返す
+                render json: @article, status: :ok  # 更新された記事をJSON形式で返す
             else
                 render json: { message: "更新失敗しました。" }, status: :unprocessable_entity  # 更新に失敗した場合のエラーメッセージ
             end

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     delete "user/article/delete",to: "users#article_delete"#headerにarticle-idを格納
     post "user/article/create",to: "users#article_create"
     get "user/articles", to: "users#articles"
-    
+    put "user/article/article_update",to: "users#article_update"
 
     #記事関連
     get "articles/all", to: "articles#all" #全記事を取得

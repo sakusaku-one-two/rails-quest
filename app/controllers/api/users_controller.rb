@@ -18,12 +18,11 @@ module Api
         def registration
             @current_user = User.new(create_user_params)
             if @current_user.save
-               return setup_jwt_into_cookie(@current_user.id)
+                return setup_jwt_into_cookie(@current_user.id)
             else
                 return render json: {errors: @current_user.errors.full_messages},status: :unauthorized
             end
         end
-
 
 
         def login
@@ -34,8 +33,7 @@ module Api
                 return setup_jwt_into_cookie(user.id)
             else
                 render json: {error: "ログインに敗しました。",email:params[:user][:email],password:login_params[:password]},status: :unauthorized
-            end     
-            
+            end
         end
 
 
@@ -43,7 +41,19 @@ module Api
             cookies.delete(:jwt,path:'/')
             render json: {message: "ログアウトしました。"},status: :ok
         end
+        
+        def article_update
+            require_params = params.permit(:id, :title, :description, :body, :tags)  # 記事のパラメータを取得し、許可されたパラメータのみを許可
+            target_id = require_params[:id]  # 記事のIDを取得
+            target_article = @current_user.articles.find_by(id: target_id)  # ユーザーの記事の中からIDで記事を検索
+            return render json: { message: "その記事は存在しません" }, status: :not_found if target_article.nil?  # 記事が見つからない場合のエラーメッセージを返す
 
+            if target_article.update(require_params)  # 記事を更新
+                return render json: target_article, status: :ok  # 更新された記事をJSON形式で返す
+            else
+                return render json: target_article.errors, status: :unprocessable_entity  # 更新に失敗した場合のエラーメッセージを返す
+            end
+        end
 
         def articles
             my_articles = @current_user.articles.includes(:tags,:user) # 'artcles'を'articles'に修正
@@ -57,7 +67,7 @@ module Api
             params_data = article_params
             params_data[:user_id] = @current_user.id
             article = Article.create!(params_data)
-            return render json: {article: article.to_json},status: :ok
+            return render json: article,status: :ok
             rescue ActiveRecord::RecordInvalid => e 
                 return render json: {message: e.message},status: :bad_request
             
@@ -96,6 +106,8 @@ module Api
         def create_user_params
             params.require(:user).permit(:username, :email, :password, :password_confirmation, :bio, :image) # 'emial'を'email'に修正
         end
+
+        
 
         def article_params
             params.require(:article).permit(:slug, :title, :description, :body, :favorited, :favoritesCount)  # 許可されたパラメータを設定
